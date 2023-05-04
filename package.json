@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "description": "A MERN Stack shopping application as an assignment for ReactJS Developer Position at arraytics",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "npm run test"
   },
   "author": "sajib",
