@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 //import routes
 
 const authRoutes = require("./routes/auth");
+const itemRoutes = require("./routes/items");
 // Load environment variables from .env file
 dotenv.config();
 
@@ -14,9 +15,10 @@ dotenv.config();
 const app = express();
 
 // Middleware
+
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 
 // Connect to MongoDB database
 mongoose.set("debug", true);
@@ -37,6 +39,7 @@ app.get("/", (req, res) => {
 // Start server
 const port = process.env.PORT || 5000;
 app.use("/api/auth/", authRoutes);
+app.use("/api/items", itemRoutes);
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
