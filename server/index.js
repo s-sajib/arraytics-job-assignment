@@ -18,7 +18,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 
 // Connect to MongoDB database
 mongoose.set("debug", true);

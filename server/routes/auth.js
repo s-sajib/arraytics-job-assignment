@@ -4,21 +4,17 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-
 //Load environment Variables
 const dotenv = require("dotenv");
 
-// Set up JWT secret key
-const jwtSecretKey = process.env.JWT_SECRET_KEY;
-
 // Define middleware for verifying JWT token
 const verifyToken = (req, res, next) => {
-  const accessToken = req.cookies.access_token;
+  const accessToken = req.cookies?.access_token;
   if (!accessToken) {
     return res.status(401).send("Access denied!");
   }
   try {
-    const verifiedToken = jwt.verify(accessToken, jwtSecretKey);
+    const verifiedToken = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
     req.user = verifiedToken;
     next();
   } catch (err) {
@@ -52,6 +48,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   const user = await User.findOne({ email: email });
   if (!user) {
     return res.status(400).send("Email or password is incorrect!");
@@ -60,12 +57,12 @@ router.post("/login", async (req, res) => {
   if (!validPassword) {
     return res.status(400).send("Email or password is incorrect!");
   }
-  const accessToken = jwt.sign({ _id: user._id }, jwtSecretKey);
+  const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY);
   res
     .cookie("access_token", accessToken, {
       httpOnly: true,
       sameSite: "none", // Set to 'lax' or 'strict' if needed
-      secure: false, // Set to true if using HTTPS
+      secure: true, // Set to true if using HTTPS
     })
     .send("Logged in successfully!");
 });
