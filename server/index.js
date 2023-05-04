@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Connect to MongoDB database
+mongoose.set("debug", true);
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {

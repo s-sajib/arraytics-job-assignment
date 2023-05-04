@@ -27,7 +27,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // Define routes for authentication
-router.post("/api/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -36,15 +36,21 @@ router.post("/api/register", async (req, res) => {
     email: email,
     password: hashedPassword,
   });
+
+  // res.send(user);
   try {
+    const validation = await user.validate();
+    console.log("User is valid!");
     const savedUser = await user.save();
+    console.log("User registered successfully!");
     res.send("User registered successfully!");
   } catch (err) {
+    console.log("Error:", err.message);
     res.status(400).send(err);
   }
 });
 
-router.post("/api/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
   if (!user) {
@@ -64,7 +70,7 @@ router.post("/api/login", async (req, res) => {
     .send("Logged in successfully!");
 });
 
-router.get("/api/user", verifyToken, async (req, res) => {
+router.get("/user", verifyToken, async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
     return res.status(404).send("User not found!");
