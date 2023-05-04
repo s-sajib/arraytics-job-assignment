@@ -8,7 +8,11 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   created_at: { type: Date, default: Date.now },
-  created_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
 });
 
 userSchema.plugin(AutoIncrement, { inc_field: "id" });
