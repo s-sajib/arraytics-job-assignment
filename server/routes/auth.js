@@ -9,6 +9,8 @@ const dotenv = require("dotenv");
 const verifyToken = require("../middlewares/verifier");
 
 // Define routes for authentication
+
+//user registration
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   const salt = await bcrypt.genSalt(10);
@@ -32,6 +34,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+//login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -44,22 +47,18 @@ router.post("/login", async (req, res) => {
     return res.status(400).send("Email or password is incorrect!");
   }
   const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY);
+  const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_REFRESH_KEY);
   res
     .cookie("access_token", accessToken, {
       httpOnly: true,
       sameSite: "none", // Set to 'lax' or 'strict' if needed
       secure: true, // Set to true if using HTTPS
+      expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
     })
-    .send("Logged in successfully!");
+    .send({ message: "Logged in successfully!", refreshToken });
 });
 
-router.get("/user", verifyToken, async (req, res) => {
-  const user = await User.findById(req.user._id);
-  if (!user) {
-    return res.status(404).send("User not found!");
-  }
-  res.send(user);
-});
+//logout
 router.get("/logout", async (req, res) => {
   res
     .cookie("access_token", "", {
@@ -68,6 +67,15 @@ router.get("/logout", async (req, res) => {
       secure: true, // Set to true if using HTTPS
     })
     .send("Logged Out successfully!");
+});
+
+//get user
+router.get("/user", verifyToken, async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(404).send("User not found!");
+  }
+  res.send(user);
 });
 
 module.exports = router;

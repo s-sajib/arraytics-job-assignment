@@ -2,7 +2,9 @@ const router = require("express").Router();
 // const User = require("../models/User");
 const Item = require("../models/Item");
 
+//middleware for authentication
 const verifyToken = require("../middlewares/verifier");
+
 //CREATE Item
 router.post("/", verifyToken, async (req, res) => {
   const newItem = new Item({
@@ -18,7 +20,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 //UPDATE Item
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", verifyToken, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     try {
@@ -39,7 +41,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 //DELETE ITEM
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     await Item.findByIdAndDelete(req.params.id);
 
@@ -50,7 +52,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //GET Item
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     res.status(200).json(item);
