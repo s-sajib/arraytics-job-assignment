@@ -20,8 +20,8 @@ function generateAccessToken(id) {
 
 // Define routes for authentication
 
-//user registration
-router.post("/register", async (req, res) => {
+//self registration
+router.post("/self-register", async (req, res) => {
   const { name, email, password } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -30,11 +30,29 @@ router.post("/register", async (req, res) => {
     email: email,
     password: hashedPassword,
   });
-
-  // res.send(user);
   try {
     const validation = await user.validate();
+    const savedUser = await user.save();
+    res.send("User registered successfully!");
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
 
+//User registers another user
+
+router.post("/register", verifyToken, async (req, res) => {
+  const { name, email, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const user = new User({
+    name: name,
+    email: email,
+    password: hashedPassword,
+    created_by: req.user._id,
+  });
+  try {
+    const validation = await user.validate();
     const savedUser = await user.save();
     res.send("User registered successfully!");
   } catch (err) {
