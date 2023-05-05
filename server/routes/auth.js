@@ -60,5 +60,14 @@ router.get("/user", verifyToken, async (req, res) => {
   }
   res.send(user);
 });
+router.get("/logout", async (req, res) => {
+  res
+    .cookie("access_token", "", {
+      httpOnly: true,
+      sameSite: "none", // Set to 'lax' or 'strict' if needed
+      secure: true, // Set to true if using HTTPS
+    })
+    .send("Logged Out successfully!");
+});
 
 module.exports = router;

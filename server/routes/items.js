@@ -2,6 +2,7 @@ const router = require("express").Router();
 // const User = require("../models/User");
 const Item = require("../models/Item");
 
+const verifyToken = require("../middlewares/verifier");
 //CREATE Item
 router.post("/", async (req, res) => {
   const newItem = new Item(req.body);
@@ -56,7 +57,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //GET ALL Items
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const allItem = await Item.find();
 
