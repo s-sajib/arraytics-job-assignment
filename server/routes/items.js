@@ -4,8 +4,11 @@ const Item = require("../models/Item");
 
 const verifyToken = require("../middlewares/verifier");
 //CREATE Item
-router.post("/", async (req, res) => {
-  const newItem = new Item(req.body);
+router.post("/", verifyToken, async (req, res) => {
+  const newItem = new Item({
+    ...req.body,
+    created_by: req.user._id,
+  });
   try {
     const savedItem = await newItem.save();
     res.status(200).json(savedItem);
@@ -59,7 +62,7 @@ router.get("/:id", async (req, res) => {
 //GET ALL Items
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const allItem = await Item.find();
+    const allItem = await Item.find().populate("created_by", "name");
 
     res.status(200).json(allItem);
   } catch (err) {
