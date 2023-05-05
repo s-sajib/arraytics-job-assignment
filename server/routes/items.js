@@ -41,7 +41,7 @@ router.patch("/:id", async (req, res) => {
 //DELETE ITEM
 router.delete("/:id", async (req, res) => {
   try {
-    const item = await Item.findByIdAndDelete(req.params.id);
+    await Item.findByIdAndDelete(req.params.id);
 
     res.status(200).json("Item has been deleted...");
   } catch (err) {
