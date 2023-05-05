@@ -52,7 +52,7 @@ router.post("/register", verifyToken, async (req, res) => {
     created_by: req.user._id,
   });
   try {
-    const validation = await user.validate();
+    const validation = await user.validateSync();
     const savedUser = await user.save();
     res.send("User registered successfully!");
   } catch (err) {

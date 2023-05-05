@@ -12,6 +12,7 @@ router.post("/", verifyToken, async (req, res) => {
     created_by: req.user._id,
   });
   try {
+    const validData = newItem.validateSync();
     const savedItem = await newItem.save();
     res.status(200).json(savedItem);
   } catch (err) {
@@ -24,6 +25,14 @@ router.patch("/:id", verifyToken, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     try {
+      const updatedData = { ...item, ...req.body };
+
+      const validationError = new Item(updatedData).validateSync();
+
+      if (validationError) {
+        return res.status(500).json(validationError);
+      }
+
       const updatedItem = await Item.findByIdAndUpdate(
         req.params.id,
         {
@@ -36,7 +45,7 @@ router.patch("/:id", verifyToken, async (req, res) => {
       res.status(500).json(err);
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).send("Item not found!");
   }
 });
 
