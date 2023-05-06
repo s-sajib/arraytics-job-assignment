@@ -1,4 +1,4 @@
-const User = require("../models/User/User");
+const User = require("../../models/User/User");
 const bcrypt = require("bcrypt");
 
 async function selfRegistration(name, email, password) {

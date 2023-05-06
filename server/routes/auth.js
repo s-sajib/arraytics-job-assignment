@@ -2,30 +2,18 @@
 const router = require("express").Router();
 const User = require("../models/User/User");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
 //Load environment Variables
-const dotenv = require("dotenv");
+require("dotenv");
 
 //import controllers
-
 const {
   selfRegistration,
   registration,
-} = require("../controllers/registrationController");
+} = require("../controllers/auth/registrationController");
+const login = require("../controllers/auth/loginController");
 
 //import middlewares
 const verifyToken = require("../middlewares/verifier");
-
-function generateAccessToken(id) {
-  return jwt.sign(
-    {
-      _id: id,
-      exp: Math.floor(Date.now() / 1000) + 15 * 60 * 1000,
-    },
-    process.env.JWT_SECRET_KEY
-  );
-}
 
 // Define routes for authentication
 
@@ -42,7 +30,6 @@ router.post("/self-register", async (req, res) => {
 });
 
 //User registers another user
-
 router.post("/register", verifyToken, async (req, res) => {
   const { name, email, password } = req.body;
   const creator = req.user._id;
@@ -57,21 +44,9 @@ router.post("/register", verifyToken, async (req, res) => {
 //login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  const { accessToken, refreshToken } = await login(email, password);
 
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    return res.status(400).send("Email or password is incorrect!");
-  }
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) {
-    return res.status(400).send("Email or password is incorrect!");
-  }
-
-  const accessToken = generateAccessToken(user._id);
-  const refreshToken = jwt.sign(
-    { _id: user._id, exp: Math.floor(Date.now() / 1000) + 8 * 60 * 60 * 1000 }, // token will be expired after 8 hours
-    process.env.JWT_REFRESH_KEY
-  );
+  //send response
   res
     .cookie("access_token", accessToken, {
       httpOnly: true,
