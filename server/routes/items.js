@@ -4,20 +4,12 @@ const Item = require("../models/Item/Item");
 
 //middleware for authentication
 const verifyToken = require("../middlewares/verifier");
+const createItemController = require("../controllers/items/createItem");
 
 //CREATE Item
 router.post("/", verifyToken, async (req, res) => {
-  const newItem = new Item({
-    ...req.body,
-    created_by: req.user._id,
-  });
-  try {
-    const validData = newItem.validateSync();
-    const savedItem = await newItem.save();
-    res.status(200).json(savedItem);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  const response = await createItemController(req, res);
+  return response;
 });
 
 //UPDATE Item

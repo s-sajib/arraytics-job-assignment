@@ -22,7 +22,14 @@ router.post("/self-register", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const savedUser = await selfRegistration(name, email, password);
+    const { savedUser, validationError } = await selfRegistration(
+      name,
+      email,
+      password
+    );
+    if (validationError) {
+      res.send(400).json(validationError);
+    }
     res.send("User registered successfully!");
   } catch (err) {
     res.status(400).send(err);
@@ -34,7 +41,15 @@ router.post("/register", verifyToken, async (req, res) => {
   const { name, email, password } = req.body;
   const creator = req.user._id;
   try {
-    const savedUser = await registration(name, email, password, creator);
+    const { savedUser, validationError } = await registration(
+      name,
+      email,
+      password,
+      creator
+    );
+    if (validationError) {
+      res.send(400).json(validationError);
+    }
     res.send("User registered successfully!");
   } catch (err) {
     res.status(400).send(err);
