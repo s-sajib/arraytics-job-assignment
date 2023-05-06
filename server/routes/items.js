@@ -57,7 +57,10 @@ router.delete("/:id", verifyToken, async (req, res) => {
 //GET Item
 router.get("/:id", verifyToken, async (req, res) => {
   try {
-    const item = await Item.findById(req.params.id);
+    const item = await Item.findById(req.params.id).populate(
+      "created_by",
+      "name"
+    );
     res.status(200).json(item);
   } catch (err) {
     res.status(500).json(err);
@@ -68,7 +71,6 @@ router.get("/:id", verifyToken, async (req, res) => {
 router.get("/", verifyToken, async (req, res) => {
   try {
     const allItem = await Item.find().populate("created_by", "name");
-    console.log(allItem.length);
     res.set("Total-Object", allItem?.length ?? 0);
     res.status(200).json(allItem);
   } catch (err) {

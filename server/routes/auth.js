@@ -85,11 +85,21 @@ router.get("/logout", async (req, res) => {
 
 //get user
 router.get("/user", verifyToken, async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id)?.populate(
+    "created_by",
+    "name"
+  );
   if (!user) {
     return res.status(404).send("User not found!");
   }
   res.send(user);
+});
+
+//get all user
+router.get("/users", verifyToken, async (req, res) => {
+  const users = await User.find()?.populate("created_by", "name");
+  res.set("User-Count", users?.length ?? 0);
+  res.send(users);
 });
 
 //refresh accessToken if expired
