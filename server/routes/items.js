@@ -1,6 +1,6 @@
 const router = require("express").Router();
 // const User = require("../models/User");
-const Item = require("../models/Item");
+const Item = require("../models/Item/Item");
 
 //middleware for authentication
 const verifyToken = require("../middlewares/verifier");

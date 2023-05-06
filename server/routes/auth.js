@@ -1,11 +1,20 @@
 // Import required packages
 const router = require("express").Router();
-const User = require("../models/User");
+const User = require("../models/User/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 //Load environment Variables
 const dotenv = require("dotenv");
+
+//import controllers
+
+const {
+  selfRegistration,
+  registration,
+} = require("../controllers/registrationController");
+
+//import middlewares
 const verifyToken = require("../middlewares/verifier");
 
 function generateAccessToken(id) {
@@ -23,16 +32,9 @@ function generateAccessToken(id) {
 //self registration
 router.post("/self-register", async (req, res) => {
   const { name, email, password } = req.body;
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const user = new User({
-    name: name,
-    email: email,
-    password: hashedPassword,
-  });
+
   try {
-    const validation = await user.validate();
-    const savedUser = await user.save();
+    const savedUser = await selfRegistration(name, email, password);
     res.send("User registered successfully!");
   } catch (err) {
     res.status(400).send(err);
@@ -43,17 +45,9 @@ router.post("/self-register", async (req, res) => {
 
 router.post("/register", verifyToken, async (req, res) => {
   const { name, email, password } = req.body;
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const user = new User({
-    name: name,
-    email: email,
-    password: hashedPassword,
-    created_by: req.user._id,
-  });
+  const creator = req.user._id;
   try {
-    const validation = await user.validateSync();
-    const savedUser = await user.save();
+    const savedUser = await registration(name, email, password, creator);
     res.send("User registered successfully!");
   } catch (err) {
     res.status(400).send(err);
