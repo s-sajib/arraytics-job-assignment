@@ -12,6 +12,8 @@ router.post("/", verifyToken, async (req, res) => {
   return response;
 });
 
+// TODO: Update the controllers in seperate file
+
 //UPDATE Item
 router.patch("/:id", verifyToken, async (req, res) => {
   try {
