@@ -23,7 +23,11 @@ app.use(cookieParser());
 // Connect to MongoDB database
 mongoose.set("debug", true);
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    dbName: "test",
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Connected to MongoDB database");
   })
