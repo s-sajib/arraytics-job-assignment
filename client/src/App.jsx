@@ -5,7 +5,9 @@ import useAuthCheck from "./hooks/useAuthCheck";
 function App() {
   const authChecked = useAuthCheck();
 
-  return <>{authChecked ? <AppRoutes /> : <div>Loading...</div>}</>;
+  return (
+    <>{authChecked ? <AppRoutes /> : <div>Checking your identity...</div>}</>
+  );
 }
 
 export default App;
