@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 
 export default function PublicRoute({ children }) {
   const user = useSelector((state) => state.auth.user);
+  // const refreshToken = useSelector((state) => state.auth.user);
 
   if (!user) {
     return children;

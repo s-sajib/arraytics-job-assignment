@@ -15,6 +15,7 @@ export const authAPI = apiSlice.injectEndpoints({
           dispatch(
             userLoggedIn({
               refreshToken: result?.data?.refreshToken,
+              user: result?.data?.user,
             })
           );
         } catch {
@@ -48,10 +49,26 @@ export const authAPI = apiSlice.injectEndpoints({
         }
       },
     }),
+    logout: builder.query({
+      query: (data) => ({
+        url: "auth/logout",
+        method: "GET",
+        body: data,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(userLoggedIn({}));
+        } catch {
+          console.error("Something went wrong!");
+        }
+      },
+    }),
   }),
 });
 export const {
   useLoginMutation,
   useRegisterMutation,
   useUserInformationQuery,
+  useLogoutQuery,
 } = authAPI;

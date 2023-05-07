@@ -29,7 +29,7 @@ async function login(req, res) {
       secure: true, // Set to true if using HTTPS
       expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
     })
-    .send({ message: "Logged in successfully!", refreshToken });
+    .send({ message: "Logged in successfully!", refreshToken, user: user });
 }
 
 module.exports = login;

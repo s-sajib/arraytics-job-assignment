@@ -58,10 +58,7 @@ router.post("/register", verifyToken, async (req, res) => {
 
 //login
 router.post("/login", async (req, res) => {
-
   await loginController(req, res);
-
-
 });
 
 //logout
@@ -72,7 +69,7 @@ router.get("/logout", async (req, res) => {
       sameSite: "none", // Set to 'lax' or 'strict' if needed
       secure: true, // Set to true if using HTTPS
     })
-    .send("Logged Out successfully!");
+    .json({ message: "Logged out successfully!" });
 });
 
 //get user
@@ -98,7 +95,7 @@ router.get("/users", verifyToken, async (req, res) => {
 router.post("/refresh", async (req, res) => {
   const refreshToken = req.body.refreshToken;
   if (!refreshToken) {
-    return res.status(400).send("Refresh token not found!");
+    return res.status(400).json({ message: "Refresh token not found!" });
   }
 
   try {
@@ -111,9 +108,9 @@ router.post("/refresh", async (req, res) => {
         secure: true, // Set to true if using HTTPS
         expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
       })
-      .send({ message: "Access Token Regenerated successfully!" });
+      .json({ message: "Access Token Regenerated successfully!" });
   } catch {
-    res.status(401).send("Refresh token is invalid!");
+    res.status(401).json({ message: "Refresh token is invalid!" });
   }
 });
 

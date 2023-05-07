@@ -10,6 +10,8 @@ import Items from "../pages/item/items";
 import CreateUser from "../pages/user/createUser";
 import EditUserDetails from "../pages/user/editUserDetails";
 import Users from "../pages/user/users";
+import LogOut from "../pages/auth/LogOut";
+
 function AppRoutes() {
   return (
     <Router>
@@ -32,6 +34,7 @@ function AppRoutes() {
             </PublicRoute>
           }
         />
+        <Route exact path="/logout" element={<LogOut />} />
         <Route
           exact
           path="/"

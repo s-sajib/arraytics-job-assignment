@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useLoginMutation } from "../features/auth/authAPI";
 import loginFormValidator from "../validators/loginFormValidator";
-// import { useNavigate } from "react-router";
 
 const useLoginForm = () => {
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({ email: "", password: "" });
   const [validationError, setValidationError] = useState("");
   const [login, { isSuccess, isError, isLoading, error }] = useLoginMutation();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,24 +23,11 @@ const useLoginForm = () => {
     try {
       loginFormValidator(values);
       login(values);
+      return navigate("/");
     } catch (err) {
       setValidationError(err.message);
     }
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      const getUser = async () => {
-        const response = await fetch("http://localhost:5000/api/auth/user", {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await response.json();
-        console.log(data); // Log the parsed JSON response
-      };
-      getUser();
-    }
-  }, [isSuccess]);
 
   return {
     values,
