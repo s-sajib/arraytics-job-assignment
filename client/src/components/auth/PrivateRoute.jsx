@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { AppBar, Button, Toolbar } from "@mui/material";
+import { AppBar, Button, Grid, Toolbar, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 export default function PrivateRoute({ children }) {
@@ -9,25 +9,29 @@ export default function PrivateRoute({ children }) {
   if (user) {
     return (
       <>
-        <AppBar sx={{ background: "black", zIndex: -1, height: "70px" }}>
+        <AppBar sx={{ background: "black", zIndex: -1 }}>
           <Toolbar>
-            <Button
-              color="info"
-              variant="contained"
-              ml="auto"
-              onClick={() => navigate("/logout")}
+            <Grid
+              container
+              justifyContent="space-between"
+              alignItems={"center"}
             >
-              Logout
-            </Button>
-
-            <Button
-              color="info"
-              variant="contained"
-              ml="auto"
-              onClick={() => navigate("/items")}
-            >
-              Items
-            </Button>
+              <Grid item xs={8} md={10}>
+                <Typography variant="h6">
+                  Hello! {user?.name || "Stranger"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} md={2} align={"end"}>
+                <Button
+                  color="error"
+                  variant="contained"
+                  ml="auto"
+                  onClick={() => navigate("/logout")}
+                >
+                  Logout
+                </Button>
+              </Grid>
+            </Grid>
           </Toolbar>
         </AppBar>
         <main style={{ marginTop: "75px" }}>{children}</main>
