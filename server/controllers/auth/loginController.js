@@ -6,7 +6,7 @@ const User = require("../../models/User/User");
 const generateAccessToken = require("../../helpers/accessTokenGenerator");
 const generateRefreshToken = require("../../helpers/refreshTokenGenerator");
 
-async function login(req,res) {
+async function login(req, res) {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
   if (!user) {
@@ -20,15 +20,16 @@ async function login(req,res) {
   const accessToken = generateAccessToken(user._id);
   const refreshToken = generateRefreshToken(user._id);
 
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   //send response
   res
-      .cookie("access_token", accessToken, {
-        httpOnly: true,
-        sameSite: "none", // Set to 'lax' or 'strict' if needed
-        secure: true, // Set to true if using HTTPS
-        expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
-      })
-      .send({ message: "Logged in successfully!", refreshToken });
+    .cookie("access_token", accessToken, {
+      httpOnly: true,
+      sameSite: "none", // Set to 'lax' or 'strict' if needed
+      secure: true, // Set to true if using HTTPS
+      expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
+    })
+    .send({ message: "Logged in successfully!", refreshToken });
 }
 
 module.exports = login;
