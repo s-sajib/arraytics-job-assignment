@@ -16,7 +16,6 @@ export default function useAuthCheck() {
     if (isSuccess) {
       dispatch(userLoggedIn({ user }));
     }
-    console.log("user", user);
   }, [dispatch, isLoading, isSuccess, user]);
 
   return authChecked;

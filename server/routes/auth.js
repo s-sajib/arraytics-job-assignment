@@ -10,7 +10,7 @@ const {
   selfRegistration,
   registration,
 } = require("../controllers/auth/registrationController");
-const login = require("../controllers/auth/loginController");
+const loginController = require("../controllers/auth/loginController");
 
 //import middlewares
 const verifyToken = require("../middlewares/verifier");
@@ -58,18 +58,10 @@ router.post("/register", verifyToken, async (req, res) => {
 
 //login
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const { accessToken, refreshToken } = await login(email, password);
 
-  //send response
-  res
-    .cookie("access_token", accessToken, {
-      httpOnly: true,
-      sameSite: "none", // Set to 'lax' or 'strict' if needed
-      secure: true, // Set to true if using HTTPS
-      expires: new Date(Date.now() + 15 * 60 * 1000), // cookie will be removed after 15 minutes
-    })
-    .send({ message: "Logged in successfully!", refreshToken });
+  await loginController(req, res);
+
+
 });
 
 //logout
