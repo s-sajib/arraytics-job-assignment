@@ -58,7 +58,12 @@ export const authAPI = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          dispatch(userLoggedIn({}));
+          dispatch(
+            userLoggedIn({
+              refreshToken: null,
+              user: null,
+            })
+          );
         } catch {
           console.error("Something went wrong!");
         }

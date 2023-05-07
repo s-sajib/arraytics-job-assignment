@@ -4,13 +4,12 @@ import { useEffect } from "react";
 
 function LogOut() {
   const navigate = useNavigate();
-  const { data, isSuccess, isError, error } = useLogoutQuery();
+  const { isSuccess, isError, error } = useLogoutQuery();
 
   useEffect(() => {
-    console.log(data);
-    if (isSuccess) navigate("/login");
+    if (isSuccess) navigate("/");
     if (isError) console.log(error);
-  }, [isSuccess, isError, navigate, error, data]);
+  }, [isSuccess, isError, navigate, error]);
 
   return <div>Logging Out...</div>;
 }
