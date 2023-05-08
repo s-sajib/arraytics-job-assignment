@@ -8,6 +8,8 @@ const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/auth");
 const itemRoutes = require("./routes/items");
+const usersRoutes = require("./routes/users");
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -48,6 +50,7 @@ app.get("/", (req, res) => {
 const port = process.env.PORT || 5000;
 app.use("/api/auth/", authRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/users", usersRoutes);
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

@@ -84,13 +84,6 @@ router.get("/user", verifyToken, async (req, res) => {
   res.send(user);
 });
 
-//get all user
-router.get("/users", verifyToken, async (req, res) => {
-  const users = await User.find()?.populate("created_by", "name");
-  res.set("User-Count", users?.length ?? 0);
-  res.send(users);
-});
-
 //refresh accessToken if expired
 router.post("/refresh", async (req, res) => {
   const refreshToken = req.body.refreshToken;
