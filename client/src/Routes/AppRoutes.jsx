@@ -4,12 +4,12 @@ import PublicRoute from "../components/auth/PublicRoute";
 import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
 import Dashboard from "../pages/common/dashboard";
-import CreateItem from "../pages/item/createItem";
-import EditItem from "../pages/item/editItem";
-import Items from "../pages/item/items";
-import CreateUser from "../pages/user/createUser";
-import EditUserDetails from "../pages/user/editUserDetails";
-import Users from "../pages/user/users";
+import CreateItem from "../pages/item/CreateItem";
+import EditItem from "../pages/item/EditItem";
+import Items from "../pages/item/Items";
+import CreateUser from "../pages/user/CreateUser";
+import EditUserDetails from "../pages/user/EditUserDetails";
+import Users from "../pages/user/Users";
 import LogOut from "../pages/auth/LogOut";
 
 function AppRoutes() {
@@ -56,7 +56,7 @@ function AppRoutes() {
         />
         <Route
           exact
-          path="/items/create"
+          path="/items/add"
           element={
             <PrivateRoute>
               <CreateItem />
