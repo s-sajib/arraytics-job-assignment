@@ -41,12 +41,10 @@ export const itemsAPI = apiSlice.injectEndpoints({
         try {
           const editResult = await queryFulfilled;
 
-          //Update item Cache
+          //Update items Cache
           await dispatch(
             apiSlice.util.updateQueryData("getItems", undefined, (draft) => {
-              let target = draft.findIndex(
-                (item) => Number(item.id) === arg.id
-              );
+              let target = draft.findIndex((item) => item._id == arg.id);
               draft[target] = editResult.data;
             })
           );
@@ -71,9 +69,7 @@ export const itemsAPI = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         const deleteResult = dispatch(
           apiSlice.util.updateQueryData("getItems", undefined, (draft) => {
-            const targetIndex = draft.findIndex(
-              (item) => Number(item.id) === arg
-            );
+            const targetIndex = draft.findIndex((item) => item._id == arg);
             draft.splice(targetIndex, 1);
           })
         );
