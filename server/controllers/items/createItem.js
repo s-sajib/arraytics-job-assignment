@@ -18,7 +18,15 @@ async function createItem(req, res) {
 
     itemValidationSchema.validate(newItem);
     const savedItem = await newItem.save();
-    return res.status(200).json(savedItem);
+    try {
+      const result = await Item.findById(savedItem._id)?.populate(
+        "created_by",
+        "name"
+      );
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json({ message: JSON.stringify(err) });
+    }
   } catch (err) {
     return res.status(500).json(err);
   }

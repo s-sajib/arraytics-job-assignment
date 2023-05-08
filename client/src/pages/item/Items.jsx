@@ -18,7 +18,7 @@ function Items() {
         )}
 
         <ItemsTable
-          data={Array.isArray(data) ? data : []}
+          data={Array.isArray(data) ? [...data].reverse() : []}
           loading={isLoading}
         />
       </Grid>
