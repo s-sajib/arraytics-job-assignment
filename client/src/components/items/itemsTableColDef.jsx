@@ -1,7 +1,9 @@
 import { IconButton, Stack } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import dayjs from "dayjs";
+import IconButtonNavigator from "../ui/IconButtonNavigator";
+
 const COLUMNS = [
   {
     field: "name",
@@ -48,9 +50,7 @@ const COLUMNS = [
     renderCell: (params) => {
       return (
         <Stack direction="row" spacing={1}>
-          <IconButton onClick={() => console.log("Edit Mode", params.row._id)}>
-            <EditIcon />
-          </IconButton>
+          <IconButtonNavigator link={`edit/${params.row._id}`} />
           <IconButton onClick={() => console.log("Delete Mode")}>
             <DeleteOutlineIcon />
           </IconButton>
