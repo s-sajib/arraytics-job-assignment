@@ -67,20 +67,18 @@ export const itemsAPI = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        const deleteResult = dispatch(
-          apiSlice.util.updateQueryData("getItems", undefined, (draft) => {
-            const targetIndex = draft.findIndex((item) => item._id == arg);
-            draft.splice(targetIndex, 1);
-          })
-        );
-
         try {
           const result = await queryFulfilled;
+          dispatch(
+            apiSlice.util.updateQueryData("getItems", undefined, (draft) => {
+              const targetIndex = draft.findIndex((item) => item._id == arg);
+              draft.splice(targetIndex, 1);
+            })
+          );
           if (result.meta.response.status === 200) {
             console.log("Successfully Deleted!");
           }
         } catch (error) {
-          deleteResult.undo();
           console.log(error);
         }
       },

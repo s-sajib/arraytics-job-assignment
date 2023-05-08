@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
-import { IconButton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import dayjs from "dayjs";
 import IconButtonNavigator from "../ui/IconButtonNavigator";
+import DeleteItemButton from "./DeleteItemButton";
 
 const COLUMNS = [
   {
@@ -52,9 +52,7 @@ const COLUMNS = [
       return (
         <Stack direction="row" spacing={1}>
           <IconButtonNavigator link={`edit/${params.row._id}`} />
-          <IconButton onClick={() => console.log("Delete Mode")}>
-            <DeleteOutlineIcon />
-          </IconButton>
+          <DeleteItemButton id={params.row._id} />
         </Stack>
       );
     },
