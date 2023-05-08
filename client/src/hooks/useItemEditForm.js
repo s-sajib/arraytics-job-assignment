@@ -23,7 +23,9 @@ const useItemEditForm = ({ id }) => {
 
   useEffect(() => {
     if (!isLoadingItem && isItemFound) {
-      setValues(item);
+      setValues({
+        name: item?.name,
+      });
     }
   }, [isLoadingItem, isItemFound, item]);
 
@@ -42,7 +44,7 @@ const useItemEditForm = ({ id }) => {
 
     try {
       itemFormValidator(values);
-      editItem(values);
+      editItem({ id, data: values });
     } catch (err) {
       setValidationError(err.message);
     }
