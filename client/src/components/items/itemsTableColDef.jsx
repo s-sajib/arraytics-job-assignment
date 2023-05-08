@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { IconButton, Stack } from "@mui/material";
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
