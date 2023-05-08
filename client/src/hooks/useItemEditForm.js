@@ -1,64 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
-  useAddItemMutation,
   useEditItemMutation,
+  useGetItemQuery,
 } from "../features/items/itemsAPI";
 import itemFormValidator from "../validators/itemFormValidator";
 
-const useItemForm = (method) => {
+const useItemEditForm = ({ id }) => {
   const [values, setValues] = useState({ name: "" });
   const [validationError, setValidationError] = useState("");
 
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [editItem, { isSuccess, isError, isLoading, error }] =
+    useEditItemMutation();
 
-  const [
-    addItem,
-    {
-      isSuccess: itemAddSuccess,
-      isError: itemAddIsError,
-      isLoading: itemAddLoading,
-      error: itemAddError,
-    },
-  ] = useAddItemMutation();
-  const [
-    editItem,
-    {
-      isSuccess: itemEditSuccess,
-      isError: itemEditIsError,
-      isLoading: itemEditLoading,
-      error: itemEditError,
-    },
-  ] = useEditItemMutation();
-
-  const navigate = useNavigate();
+  const {
+    data: item,
+    isLoading: isLoadingItem,
+    isSuccess: isItemFound,
+    isError: isItemFindingError,
+    error: itemFindingError,
+  } = useGetItemQuery(id);
 
   useEffect(() => {
-    if (method === "edit") {
-      setIsError(itemEditIsError);
-      setError(itemEditError);
-      setIsLoading(itemEditLoading);
-      setIsSuccess(itemEditSuccess);
-    } else if (method === "create") {
-      setIsError(itemAddIsError);
-      setError(itemAddError);
-      setIsLoading(itemAddLoading);
-      setIsSuccess(itemAddSuccess);
+    if (!isLoadingItem && isItemFound) {
+      setValues(item);
     }
-  }, [
-    itemAddError,
-    itemAddIsError,
-    itemAddLoading,
-    itemAddSuccess,
-    itemEditError,
-    itemEditIsError,
-    itemEditLoading,
-    itemEditSuccess,
-    method,
-  ]);
+  }, [isLoadingItem, isItemFound, item]);
+
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -70,24 +39,20 @@ const useItemForm = (method) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (method === "edit") {
-      try {
-        itemFormValidator(values);
-        editItem(values);
-        return navigate("/items");
-      } catch (err) {
-        setValidationError(err.message);
-      }
-    } else if (method === "create") {
-      try {
-        itemFormValidator(values);
-        addItem(values);
-        return navigate("/items");
-      } catch (err) {
-        setValidationError(err.message);
-      }
+
+    try {
+      itemFormValidator(values);
+      editItem(values);
+    } catch (err) {
+      setValidationError(err.message);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      return navigate("/items");
+    }
+  }, [isSuccess, navigate]);
 
   return {
     values,
@@ -98,7 +63,10 @@ const useItemForm = (method) => {
     isSuccess,
     isError,
     validationError,
+    isItemFindingError,
+    itemFindingError,
+    isLoadingItem,
   };
 };
 
-export default useItemForm;
+export default useItemEditForm;

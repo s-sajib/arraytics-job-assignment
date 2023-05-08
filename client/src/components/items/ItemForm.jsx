@@ -5,11 +5,19 @@ import {
   CardContent,
   CardHeader,
   Grid,
+  Skeleton,
   TextField,
 } from "@mui/material";
 
 /* eslint-disable no-unused-vars */
-function ItemForm({ values, handleChange, handleSubmit, isLoading, method }) {
+function ItemForm({
+  values,
+  handleChange,
+  handleSubmit,
+  isLoading,
+  method,
+  isItemLoading = false,
+}) {
   return (
     <Grid
       container
@@ -26,18 +34,27 @@ function ItemForm({ values, handleChange, handleSubmit, isLoading, method }) {
           />
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <TextField
-                name="name"
-                value={values?.name}
-                placeholder="Item Name"
-                onChange={handleChange}
-                label="Name"
-                variant="outlined"
-                fullWidth
-                required
-                type="text"
-                sx={{ my: 2 }}
-              />
+              {isItemLoading ? (
+                <Skeleton
+                  variant="rounded"
+                  width={"100%"}
+                  height={50}
+                  sx={{ my: 2 }}
+                />
+              ) : (
+                <TextField
+                  name="name"
+                  value={values?.name}
+                  placeholder="Item Name"
+                  onChange={handleChange}
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  type="text"
+                  sx={{ my: 2 }}
+                />
+              )}
 
               <Button variant="contained" type="submit" disabled={isLoading}>
                 {method === "create" ? "Create" : "Update"}
