@@ -3,15 +3,15 @@ import { apiSlice } from "../api/apiSlice";
 export const usersAPI = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
-      query: () => "/items",
+      query: () => "/users",
     }),
     getUser: builder.query({
-      query: (id) => `/items/${id}`,
+      query: (id) => `/users/${id}`,
     }),
 
     addUser: builder.mutation({
       query: (data) => ({
-        url: "/items",
+        url: "/auth/register",
         method: "POST",
         body: data,
       }),
@@ -30,9 +30,10 @@ export const usersAPI = apiSlice.injectEndpoints({
         }
       },
     }),
+
     editUser: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/items/${id}`,
+        url: `/users/${id}`,
         method: "PATCH",
         body: data,
       }),
@@ -44,7 +45,7 @@ export const usersAPI = apiSlice.injectEndpoints({
           //Update items Cache
           await dispatch(
             apiSlice.util.updateQueryData("getUsers", undefined, (draft) => {
-              let target = draft.findIndex((item) => item._id == arg.id);
+              let target = draft.findIndex((user) => user._id == arg.id);
               draft[target] = editResult.data;
             })
           );
@@ -54,6 +55,7 @@ export const usersAPI = apiSlice.injectEndpoints({
           await dispatch(
             apiSlice.util.updateQueryData("getUser", id, (draft) => {
               draft.name = editResult.data.name;
+              draft.email = editResult.data.email;
             })
           );
         } catch (error) {
@@ -63,7 +65,7 @@ export const usersAPI = apiSlice.injectEndpoints({
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: `items/${id}`,
+        url: `users/${id}`,
         method: "DELETE",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
@@ -71,7 +73,7 @@ export const usersAPI = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
           dispatch(
             apiSlice.util.updateQueryData("getUsers", undefined, (draft) => {
-              const targetIndex = draft.findIndex((item) => item._id == arg);
+              const targetIndex = draft.findIndex((user) => user._id == arg);
               draft.splice(targetIndex, 1);
             })
           );

@@ -3,6 +3,7 @@
 import { AppBar, Button, Grid, Toolbar, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
+import BackButton from "../ui/BackButton";
 export default function PrivateRoute({ children }) {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
@@ -34,7 +35,11 @@ export default function PrivateRoute({ children }) {
             </Grid>
           </Toolbar>
         </AppBar>
-        <main style={{ marginTop: "75px" }}>{children}</main>
+
+        <main style={{ marginTop: "75px" }}>
+          <BackButton style={{ marginTop: "2rem", marginBottom: "2rem" }} />
+          {children}
+        </main>
       </>
     );
   } else {
