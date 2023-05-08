@@ -25,10 +25,15 @@ async function registration(name, email, password, created_by) {
     password: hashedPassword,
     created_by: created_by,
   });
-  const validationError = await user.validate();
+
+  const validationError = user.validateSync();
   userValidationSchema.validate(user);
   const savedUser = await user.save();
-  return { validationError, savedUser };
+  const newlySavedUser = await User.findById(savedUser._id).populate(
+    "created_by",
+    "name"
+  );
+  return { validationError, newlySavedUser };
 }
 
 module.exports = { selfRegistration, registration };

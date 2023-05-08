@@ -28,11 +28,11 @@ router.post("/self-register", async (req, res) => {
       password
     );
     if (validationError) {
-      res.send(400).json(validationError);
+      res.status(400).send(validationError);
     }
-    res.send("User registered successfully!");
+    res.status(201).json({ message: "User registered successfully!" });
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).json(err);
   }
 });
 
