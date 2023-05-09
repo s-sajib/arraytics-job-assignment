@@ -27,13 +27,11 @@ function RegistrationForm({
     case "create":
       buttonText = "Create User";
       break;
-    case "update":
-      buttonText = "Update Data";
-      break;
     default:
       buttonText = "Register";
       break;
   }
+
   return (
     <Grid
       container
