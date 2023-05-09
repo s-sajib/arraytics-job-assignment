@@ -14,6 +14,7 @@ const loginController = require("../controllers/auth/loginController");
 
 //import middlewares
 const verifyToken = require("../middlewares/verifier");
+const generateRefreshToken = require("../helpers/refreshTokenGenerator");
 
 // Define routes for authentication
 
@@ -78,10 +79,16 @@ router.get("/user", verifyToken, async (req, res) => {
     "created_by",
     "name"
   );
+
   if (!user) {
     return res.status(404).send("User not found!");
   }
-  res.send(user);
+  const userInfoToSend = {
+    name: user.name,
+    email: user.email,
+  };
+  const refreshToken = generateRefreshToken(user._id);
+  res.json({ user: userInfoToSend, refreshToken });
 });
 
 //refresh accessToken if expired

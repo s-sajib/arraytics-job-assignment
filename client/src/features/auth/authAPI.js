@@ -40,11 +40,7 @@ export const authAPI = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          dispatch(
-            userLoggedIn({
-              user: result?.data,
-            })
-          );
+          dispatch(userLoggedIn(result.data));
         } catch {
           console.error("Something went wrong!");
         }
@@ -72,6 +68,14 @@ export const authAPI = apiSlice.injectEndpoints({
         }
       },
     }),
+    refreshAccessToken: builder.mutation({
+      query: (data) => ({
+        url: "auth/refresh",
+        method: "POST",
+        body: data,
+      }),
+      keepUnusedDataFor: 14 * 60, //14 minutes
+    }),
   }),
 });
 export const {
@@ -79,4 +83,5 @@ export const {
   useRegisterMutation,
   useUserInformationQuery,
   useLogoutQuery,
+  useRefreshAccessTokenMutation,
 } = authAPI;
