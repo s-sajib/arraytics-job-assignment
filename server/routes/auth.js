@@ -84,6 +84,7 @@ router.get("/user", verifyToken, async (req, res) => {
     return res.status(404).send("User not found!");
   }
   const userInfoToSend = {
+    _id: user._id,
     name: user.name,
     email: user.email,
   };

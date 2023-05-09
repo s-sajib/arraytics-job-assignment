@@ -8,9 +8,12 @@ const verifyToken = (req, res, next) => {
     const verifiedToken = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
 
     req.user = verifiedToken;
+
     next();
   } catch (err) {
-    res.status(400).send("Invalid token!");
+    res
+      .status(406)
+      .json({ message: "Access token expired! Please log in again!" });
   }
 };
 
