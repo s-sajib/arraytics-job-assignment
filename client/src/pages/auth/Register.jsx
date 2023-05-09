@@ -17,6 +17,7 @@ function Register() {
     <Grid container spacing={2}>
       <Grid item xs={12} justifyContent={"center"} alignItems={"center"}>
         <RegistrationForm
+          method="self-create"
           isError={isError}
           error={error}
           validationError={validationError}

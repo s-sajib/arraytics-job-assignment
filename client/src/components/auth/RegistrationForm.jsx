@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 
 /* eslint-disable no-unused-vars */
 function RegistrationForm({
+  method,
   values,
   handleChange,
   handleSubmit,
@@ -21,6 +22,18 @@ function RegistrationForm({
   error,
   validationError,
 }) {
+  let buttonText = "Register";
+  switch (method) {
+    case "create":
+      buttonText = "Create User";
+      break;
+    case "update":
+      buttonText = "Update Data";
+      break;
+    default:
+      buttonText = "Register";
+      break;
+  }
   return (
     <Grid
       container
@@ -31,7 +44,7 @@ function RegistrationForm({
     >
       <Grid item xs={12} md={6}>
         <Card sx={{ minWidth: "40vw" }} align="center">
-          <CardHeader title="Please Login to Continue" align="center" />
+          <CardHeader title="Let's Sign you Up!" align="center" />
           <CardContent>
             <form onSubmit={handleSubmit}>
               {isError && (
@@ -92,11 +105,13 @@ function RegistrationForm({
                 sx={{ my: 2 }}
               />
               <Button variant="contained" type="submit" disabled={isLoading}>
-                Register
+                {buttonText}
               </Button>
-              <Typography variant="body2" sx={{ my: 1 }}>
-                Already have an account? <Link to="/login">Login Here</Link>
-              </Typography>
+              {method === "self-create" && (
+                <Typography variant="body2" sx={{ my: 1 }}>
+                  Already have an account? <Link to="/login">Login Here</Link>
+                </Typography>
+              )}
             </form>
           </CardContent>
         </Card>

@@ -30,13 +30,14 @@ const useRegistrationForm = () => {
       registrationFormValidator(values);
       addUser(values);
     } catch (err) {
+      console.log("Error here", err);
       setValidationError(err.message);
     }
   };
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/");
+      navigate(-1);
     }
   }, [isSuccess, navigate]);
 

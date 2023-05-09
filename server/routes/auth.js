@@ -50,7 +50,7 @@ router.post("/register", verifyToken, async (req, res) => {
     if (validationError) {
       res.send(400).json(validationError);
     }
-    res.send("User registered successfully!");
+    res.status(201).json(savedUser);
   } catch (err) {
     res.status(400).send(err);
   }
