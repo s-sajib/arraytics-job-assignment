@@ -19,7 +19,7 @@ export default function PrivateRoute({ children }) {
             >
               <Grid item xs={8} md={10}>
                 <Typography variant="h6">
-                  Hello! {user?.name || "Stranger"}
+                  Hello, {user?.name || "Stranger"}!
                 </Typography>
               </Grid>
               <Grid item xs={4} md={2} align={"end"}>
