@@ -42,7 +42,7 @@ router.post("/register", verifyToken, async (req, res) => {
   const { name, email, password } = req.body;
   const creator = req.user._id;
   try {
-    const { savedUser, validationError } = await registration(
+    const { newlySavedUser, validationError } = await registration(
       name,
       email,
       password,
@@ -51,7 +51,7 @@ router.post("/register", verifyToken, async (req, res) => {
     if (validationError) {
       res.send(400).json(validationError);
     }
-    res.status(201).json(savedUser);
+    res.status(201).json(newlySavedUser);
   } catch (err) {
     res.status(400).send(err);
   }
